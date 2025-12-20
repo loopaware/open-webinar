@@ -1,3 +1,25 @@
+[project]
+name = "open-webinar-platform"
+version = "0.1.0"
+description = "A generic, self-hostable webinar hosting platform."
+authors = [
+    {name = "Fredrick Amnehagen", email = "fredrick@loopaware.com"},
+]
+dependencies = [
+    "django>=5.0",
+    "djangorestframework>=3.14",
+    "psycopg2-binary>=2.9",
+    "gunicorn>=21.2",
+    "django-cors-headers>=4.3",
+    "whitenoise>=6.6",
+    "python-dotenv>=1.0",
+    "inertia-django>=0.4.0",
+    "django-vite>=3.0.0",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
 [tool.ruff]
 line-length = 88
 target-version = "py311"

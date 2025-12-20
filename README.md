@@ -1,49 +1,42 @@
-# Webinar Registration Project ("Svamparnas Värld")
+# OpenWebinar Platform
 
-A modern, full-stack application for managing webinar registrations, built with Django, Vue.js 3, and Tailwind CSS.
+**OpenWebinar** is a generic, self-hostable webinar hosting platform built for high-performance and visual impact.
+
+> **Note:** This project originated as a school assignment ("Svamparnas Värld") to demonstrate modern cloud infrastructure, CI/CD pipelines, and full-stack development. It has since evolved into a reusable platform.
 
 ## Architecture
 
-The project is decoupled into a backend (API) and a frontend (SPA).
+The platform uses a modern, monolithic architecture for simplicity and performance:
 
-- **Backend**: Django + Django REST Framework.
-- **Frontend**: Vue 3 (Vite) + Tailwind CSS + Lucide Icons.
-- **Infrastructure**: Platform-agnostic setup using OpenTofu (Azure & Proxmox) and Ansible.
+- **Backend**: Django (Python) serving an Inertia.js API.
+- **Frontend**: Vue.js 3 + Tailwind CSS (bundled via Vite).
+- **Infrastructure**: Platform-agnostic IaC using OpenTofu & Ansible (Azure, Proxmox, Docker).
 
-## Development
+## Documentation
 
-### Backend Setup
-1. `cd backend`
-2. `python3 -m venv venv`
-3. `source venv/bin/activate`
-4. `pip install -r ../requirements.txt`
-5. `python manage.py migrate`
-6. `python manage.py runserver`
+- **[Architecture Overview](docs/deployment/architecture.md)**: High-level system design and topology.
+- **[Development Guide](DEVELOPER_GUIDE.md)**: Setup instructions for local development.
+- **[Deployment & CI/CD](docs/deployment/ci-cd.md)**: How to deploy to production.
+- **[Infrastructure Details](infra/README.md)**: Deep dive into the OpenTofu and Ansible setup.
 
-### Frontend Setup
-1. `cd frontend`
-2. `npm install`
-3. `npm run dev`
+## Quick Start (Local)
 
-## Testing
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/loopaware/svamparnas-varld.git
+   cd svamparnas-varld
+   ```
 
-### Backend Tests
-`cd backend && pytest`
+2. **Start the Dockerized Environment:**
+   ```bash
+   cd infra/opentofu/local
+   tofu init && tofu apply
+   ```
 
-### Frontend Tests
-`cd frontend && npm test`
+3. **Configure & Run:**
+   ```bash
+   ./scripts/ci_local_test.sh
+   ```
 
-### E2E Tests (Playwright)
-`cd frontend && npm run test:e2e`
-
-## Deployment
-
-The project uses a strict Git-based workflow for deployment.
-
-- **Production Branch (`production`)**: Pushes to this branch trigger the automated deployment pipeline which provisions infrastructure via **OpenTofu** and configures servers via **Ansible**.
-- **Development Branch (`development`)**: Pushes here trigger integration tests on a local Docker-based replica of the infrastructure.
-
-For detailed architecture and setup instructions, see:
-- [Infrastructure Architecture](docs/deployment/architecture.md)
-- [CI/CD Workflow](docs/deployment/ci-cd.md)
-- [Infrastructure README](infra/README.md)
+## License
+MIT

@@ -1,9 +1,14 @@
-# Branding: "Svamparnas Värld" - The Ultimate Experience
+# Branding: OpenWebinar Platform
 
-## Vision
-To sell the experience of a lifetime. A journey into the unseen, where biology meets divinity. The brand is no longer just about a webinar; it's about joining an elite circle of explorers uncovering the secrets of the universe through the mycelium network.
+**OpenWebinar** is a premium, self-hosted webinar platform designed for high-impact visual storytelling.
 
-## Color Palette: The "Evergreen & Gold" Collection
+## Default Theme: "The Obsidian Forest"
+The platform comes pre-configured with the "Svamparnas Värld" theme, demonstrating the engine's capabilities.
+
+### Vision
+To provide a cinematic, immersive registration experience that transcends standard forms.
+
+### Color Palette (Default)
 
 | Name | Hex | Usage |
 | :--- | :--- | :--- |
@@ -15,7 +20,7 @@ To sell the experience of a lifetime. A journey into the unseen, where biology m
 | **Ether Mist** | `#f0f9f0` | Clean, breathable space for premium readability. |
 | **Pure Marrow** | `#ffffff` | Pure highlights and sharp contrast. |
 
-## Visual Language: "Ethereal Brutalism"
+## Visual Language
 - **High Contrast**: Dark backgrounds with glowing gold elements.
 - **Ultra-Premium Typography**: Extra-bold headings with wide character spacing for a cinematic feel.
 - **Motion as Narrative**: Three.js backgrounds that don't just float, but *evolve* as you scroll.
