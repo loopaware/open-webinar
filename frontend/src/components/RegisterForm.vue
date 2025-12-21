@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { Calendar, Mail, User, Building, Send, CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-vue-next'
 
 const props = defineProps<{
   new_attendee?: any
+  event_date: string
 }>()
 
 const form = useForm({
@@ -12,7 +13,11 @@ const form = useForm({
   email: '',
   company: '',
   experience: 'nyborjare',
-  date: '2025-12-24'
+  date: ''
+})
+
+onMounted(() => {
+  form.date = props.event_date
 })
 
 const feedback = ref({ message: '', isError: false, imageUrl: '' })
@@ -22,9 +27,10 @@ watch(() => props.new_attendee, (newVal) => {
     feedback.value = {
       message: `PROTOCOL ACCEPTED. Welcome, ${newVal.name}.`,
       isError: false,
-      imageUrl: newVal.image_url
+      imageUrl: newVal.image
     }
     form.reset()
+    form.date = props.event_date
   }
 }, { immediate: true })
 
@@ -97,7 +103,7 @@ const register = () => {
                 <Calendar class="w-3 h-3" /> CHOSEN WINDOW
               </label>
               <select v-model="form.date" class="w-full px-0 py-4 bg-transparent border-b-2 border-white/10 focus:border-brand-gold text-white text-xl font-black focus:outline-none transition-all appearance-none cursor-pointer">
-                <option value="2025-12-24" class="bg-brand-obsidian">24 DEC 2025 - THE UNVEILING</option>
+                <option :value="event_date" class="bg-brand-obsidian">{{ event_date }} - THE UNVEILING</option>
               </select>
             </div>
           </div>

@@ -58,6 +58,18 @@
     ADMIN_PASSWORD: "{{ admin_password }}"
     SECRET_KEY: "{{ secret_key }}"
 
+- name: Seed database
+  command: "{{ app_dir }}/backend/venv/bin/python manage.py seed_webinar"
+  args:
+    chdir: "{{ app_dir }}/backend"
+  environment:
+    DB_HOST: "{{ db_host }}"
+    DB_PASSWORD: "{{ db_password }}"
+    ADMIN_PASSWORD: "{{ admin_password }}"
+    SECRET_KEY: "{{ secret_key }}"
+    USE_S3: "{{ use_s3 | default('True') }}"
+    AWS_S3_ENDPOINT_URL: "{{ s3_endpoint | default('http://minio:9000') }}"
+
 - name: Collect static files
   command: "{{ app_dir }}/backend/venv/bin/python manage.py collectstatic --noinput"
   args:

@@ -10,3 +10,5 @@ pytest-django
 factory-boy
 inertia-django
 django-vite
+django-storages
+boto3

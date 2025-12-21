@@ -2,6 +2,9 @@
 - name: Configure all servers
   hosts: all
   become: yes
+  vars:
+    db_name: webinar_db
+    db_user: adminuser
   roles:
     - common
 
@@ -10,6 +13,15 @@
   become: yes
   roles:
     - database
+
+- name: Configure MinIO
+  hosts: minio
+  become: yes
+  vars:
+    minio_root_user: minioadmin
+    minio_root_password: minioadmin
+  roles:
+    - minio
 
 - name: Configure Backend
   hosts: backend

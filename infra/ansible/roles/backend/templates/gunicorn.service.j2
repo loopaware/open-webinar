@@ -11,6 +11,11 @@ Environment="DB_PASSWORD={{ db_password }}"
 Environment="ADMIN_PASSWORD={{ admin_password }}"
 Environment="SECRET_KEY={{ secret_key }}"
 Environment="ALLOWED_HOSTS={{ allowed_hosts }}"
+Environment="USE_S3={{ use_s3 | default('True') }}"
+Environment="AWS_S3_ENDPOINT_URL={{ s3_endpoint | default('http://minio:9000') }}"
+Environment="AWS_ACCESS_KEY_ID={{ minio_user | default('minioadmin') }}"
+Environment="AWS_SECRET_ACCESS_KEY={{ minio_password | default('minioadmin') }}"
+Environment="AWS_STORAGE_BUCKET_NAME={{ minio_bucket | default('webinar-media') }}"
 ExecStart={{ app_dir }}/backend/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:{{ app_dir }}/backend.sock core.wsgi:application
 
 [Install]

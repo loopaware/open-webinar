@@ -2,6 +2,7 @@ from PIL import Image
 import random
 import os
 import logging
+from io import BytesIO
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -72,7 +73,7 @@ def _draw_spots(pixels, cap_fill_color, spot_color):
                 if pixels[(spot_y+1) * 16 + (spot_x+1)] == cap_fill_color:
                     _set_pixel(pixels, spot_x + 1, spot_y + 1, spot_color)
 
-def generate_mushroom(seed: int, output_path: str):
+def generate_mushroom(seed: int):
     random.seed(seed)
 
     # Define base colors
@@ -118,15 +119,8 @@ def generate_mushroom(seed: int, output_path: str):
     # Resize to 64x64 for better visibility (nearest neighbor to keep pixel look)
     img = img.resize((64, 64), Image.NEAREST)
 
-    # Ensure output directory exists
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    img.save(output_path)
-
-if __name__ == '__main__':
-    # Example usage if script is run directly
-    # This part should not be used by the main application,
-    # but for testing the generation logic.
-    logging.info("Generating example mushrooms...")
-    for i in range(5):
-        generate_mushroom(i, f'example_mushroom_{i}.png')
-    logging.info("Generated 5 example mushrooms (example_mushroom_0.png to example_mushroom_4.png)")
+    # Return as BytesIO
+    buffer = BytesIO()
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+    return buffer

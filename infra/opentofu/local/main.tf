@@ -90,3 +90,43 @@ resource "docker_container" "bastion" {
     name = docker_network.main.name
   }
 }
+
+# MinIO Container
+resource "docker_image" "minio" {
+  name = "minio/minio:latest"
+}
+
+resource "docker_container" "minio" {
+  name  = "${var.project_name}-minio"
+  image = docker_image.minio.name
+  hostname = "minio"
+  
+  env = [
+    "MINIO_ROOT_USER=minioadmin",
+    "MINIO_ROOT_PASSWORD=minioadmin"
+  ]
+
+  command = ["server", "/data", "--console-address", ":9001"]
+
+  networks_advanced {
+    name = docker_network.main.name
+  }
+
+  volumes {
+    container_path = "/data"
+    volume_name    = docker_volume.minio_data.name
+  }
+
+  ports {
+    internal = 9000
+    external = 9000
+  }
+  ports {
+    internal = 9001
+    external = 9001
+  }
+}
+
+resource "docker_volume" "minio_data" {
+  name = "${var.project_name}-minio-data"
+}

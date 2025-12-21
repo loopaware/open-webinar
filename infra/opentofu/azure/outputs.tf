@@ -18,6 +18,10 @@ output "proxy_private_ip" {
   value = azurerm_network_interface.proxy.private_ip_address
 }
 
+output "minio_private_ip" {
+  value = azurerm_network_interface.minio.private_ip_address
+}
+
 output "storage_account_name" {
   value = azurerm_storage_account.main.name
 }

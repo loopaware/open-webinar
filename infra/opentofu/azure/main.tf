@@ -326,3 +326,44 @@ resource "azurerm_linux_virtual_machine" "bastion" {
     version   = "latest"
   }
 }
+
+# 5. MinIO VM
+resource "azurerm_network_interface" "minio" {
+  name                = "MinIOVM-nic"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+
+  ip_configuration {
+    name                          = "ipconfig1"
+    subnet_id                     = azurerm_subnet.internal.id
+    private_ip_address_allocation = "Dynamic"
+  }
+}
+
+resource "azurerm_linux_virtual_machine" "minio" {
+  name                = "MinIOVM"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  size                = "Standard_B2s_v2"
+  admin_username      = var.admin_username
+  network_interface_ids = [
+    azurerm_network_interface.minio.id,
+  ]
+
+  admin_ssh_key {
+    username   = var.admin_username
+    public_key = var.admin_public_key
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "StandardSSD_LRS"
+  }
+
+  source_image_reference {
+    publisher = "Debian"
+    offer     = "debian-13"
+    sku       = "13"
+    version   = "latest"
+  }
+}

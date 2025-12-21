@@ -1,11 +1,12 @@
 import os
 from django.conf import settings
 from django.shortcuts import redirect
-from inertia import render, share
+from django.core.files.base import ContentFile
+from inertia import render
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
-from .models import Attendee
-from .serializers import AttendeeSerializer
+from .models import Attendee, Speaker, AgendaItem, Setting
+from .serializers import AttendeeSerializer, SpeakerSerializer, AgendaItemSerializer, SettingSerializer
 from .utils import generate_mushroom
 import logging
 
@@ -15,22 +16,17 @@ class IndexView(views.APIView):
     permission_classes = [permissions.AllowAny]
     
     def get(self, request):
+        speakers = Speaker.objects.all()
+        agenda = AgendaItem.objects.all()
+        settings_queryset = Setting.objects.all()
+        
+        # Convert settings to a dict for easier frontend use
+        settings_dict = {s.key: s.value for s in settings_queryset}
+        
         return render(request, 'App', props={
-            'event_date': '2025-12-24',
-            'speakers': [
-                {
-                    'name': 'Dr. M. Myceliaceae',
-                    'title': 'Professor i Mykologisk Neurobiologi',
-                    'desc': 'Ledande expert på svampnätverkens bio-elektriska kommunikation.',
-                    'image': '/img/m.myceliaceae.jpg'
-                },
-                {
-                    'name': 'A. Amanita',
-                    'title': 'Ljuddesigner & Myko-musiker',
-                    'desc': 'Pionjär inom översättning av biologiska signaler till auditiv konst.',
-                    'image': '/img/a.amanita.jpg'
-                }
-            ],
+            'speakers': SpeakerSerializer(speakers, many=True).data,
+            'agenda': AgendaItemSerializer(agenda, many=True).data,
+            'settings': settings_dict,
             'new_attendee': request.session.pop('new_attendee', None)
         })
 
@@ -44,16 +40,12 @@ class RegisterAttendeeView(views.APIView):
             attendee = serializer.save()
             
             try:
-                # Setup media path for mushroom art
+                # Generate mushroom art in-memory
+                image_buffer = generate_mushroom(attendee.id)
                 image_filename = f"attendee_mushroom_{attendee.id}.png"
-                relative_path = os.path.join('attendees', image_filename)
-                absolute_path = os.path.join(settings.MEDIA_ROOT, relative_path)
                 
-                os.makedirs(os.path.dirname(absolute_path), exist_ok=True)
-                generate_mushroom(attendee.id, absolute_path)
-                
-                attendee.image_url = os.path.join(settings.MEDIA_URL, relative_path)
-                attendee.save()
+                # Save to ImageField (handles S3/MinIO upload automatically)
+                attendee.image.save(image_filename, ContentFile(image_buffer.read()), save=True)
                 
                 request.session['new_attendee'] = AttendeeSerializer(attendee).data
                 return redirect('index')
@@ -62,23 +54,17 @@ class RegisterAttendeeView(views.APIView):
                 request.session['new_attendee'] = AttendeeSerializer(attendee).data
                 return redirect('index')
         
+        # Re-fetch data for errors page
+        speakers = Speaker.objects.all()
+        agenda = AgendaItem.objects.all()
+        settings_queryset = Setting.objects.all()
+        settings_dict = {s.key: s.value for s in settings_queryset}
+
         return render(request, 'App', props={
             'errors': serializer.errors,
-            'event_date': '2025-12-24',
-            'speakers': [
-                {
-                    'name': 'Dr. M. Myceliaceae',
-                    'title': 'Professor i Mykologisk Neurobiologi',
-                    'desc': 'Ledande expert på svampnätverkens bio-elektriska kommunikation.',
-                    'image': '/img/m.myceliaceae.jpg'
-                },
-                {
-                    'name': 'A. Amanita',
-                    'title': 'Ljuddesigner & Myko-musiker',
-                    'desc': 'Pionjär inom översättning av biologiska signaler till auditiv konst.',
-                    'image': '/img/a.amanita.jpg'
-                }
-            ]
+            'speakers': SpeakerSerializer(speakers, many=True).data,
+            'agenda': AgendaItemSerializer(agenda, many=True).data,
+            'settings': settings_dict,
         })
 
 class ListAttendeesView(views.APIView):

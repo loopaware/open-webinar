@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'inertia',
     'django_vite',
     'webinar',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -114,3 +115,22 @@ CSRF_COOKIE_NAME = "XSRF-TOKEN"
 CSRF_HEADER_NAME = "HTTP_X_XSRF_TOKEN"
 
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
+
+# S3 / MinIO Settings
+USE_S3 = os.environ.get('USE_S3', 'True') == 'True'
+
+if USE_S3:
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', 'minioadmin')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', 'minioadmin')
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'webinar-media')
+    AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL', 'http://minio:9000')
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'us-east-1')
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = 'public-read'
+    AWS_QUERYSTRING_AUTH = False
+    
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    # For static files if needed:
+    # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
