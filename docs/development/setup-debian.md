@@ -11,13 +11,11 @@ sudo apt update
 sudo apt install git python3 python3-pip python3-venv postgresql postgresql-contrib libpq-dev -y
 ```
 
-## 2. Clone the Repository
-
-Clone the project source code to your local machine.
+### 3. Clone the Repository
 
 ```bash
-git clone https://github.com/Butani89/webinar_project.git
-cd webinar_project
+git clone https://github.com/loopaware/open-webinar.git
+cd open-webinar
 ```
 
 ## 3. Database Setup

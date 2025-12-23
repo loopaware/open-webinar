@@ -16,7 +16,7 @@ if [ -d "/var/www/html/.git" ]; then
   git reset --hard origin/main
 else
   sudo rm -rf /var/www/html/*
-  git clone https://github.com/Butani89/webinar_project.git /var/www/html/
+  git clone https://github.com/loopaware/open-webinar.git /var/www/html/
 fi
 
 # 3. Setup Python Virtual Environment

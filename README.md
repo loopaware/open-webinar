@@ -23,8 +23,8 @@ The platform uses a modern, monolithic architecture for simplicity and performan
 
 1. **Clone the repo:**
    ```bash
-   git clone https://github.com/loopaware/svamparnas-varld.git
-   cd svamparnas-varld
+   git clone https://github.com/loopaware/open-webinar.git
+   cd open-webinar
    ```
 
 2. **Start the Dockerized Environment:**

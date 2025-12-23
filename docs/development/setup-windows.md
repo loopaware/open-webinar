@@ -28,13 +28,11 @@ If you prefer to work directly in Windows without WSL.
 *   **PostgreSQL:** Download and install the [PostgreSQL Installer](https://www.postgresql.org/download/windows/).
     *   During setup, remember the password you set for the `postgres` superuser.
 
-### 2. Clone the Repository
-
-Open **PowerShell** or **Command Prompt**:
+### 3. Clone the Repository
 
 ```powershell
-git clone https://github.com/Butani89/webinar_project.git
-cd webinar_project
+git clone https://github.com/loopaware/open-webinar.git
+cd open-webinar
 ```
 
 ### 3. Database Setup
